@@ -23,6 +23,9 @@ shared void readFile(String filePath) {
             String? firstWord = firstWords.first;
             print(firstWord);
 
+            value index =resource.name.indexOf(".");
+            variable String nameOfFile = resource.name.substring(0,index);
+
             switch (firstWord)
             case ("add") {
                 textOfFile += addFun();
@@ -56,7 +59,7 @@ shared void readFile(String filePath) {
                 //textOfFile += popFun();
             }
             case ("push") {
-                //textOfFile += pushFun();
+                textOfFile += pushFun(line,nameOfFile);
             }
             else {  }
         });
@@ -82,67 +85,67 @@ String changeNameOfSuffix(String name,String dict){
 
 String addFun(){
     variable String tmp="";
-    tmp+="@SP\n";
-    tmp+="A=M\n";
-    tmp+="A=A-1\n";
-    tmp+="D=M\n";
-    tmp+="A=A-1\n";
-    tmp+="M=M+D\n";
+    tmp+="@SP\n"; //set A ="SP"
+    tmp+="A=M\n"; //A=RAM[A]=RAM[SP]
+    tmp+="A=A-1\n";//the location of the first operand
+    tmp+="D=M\n"; //set D= firs operand
+    tmp+="A=A-1\n";//the location of the second operand
+    tmp+="M=M+D\n";//Adding  operands and writing in the stack (on the head)
 
     return tmp;
 }
 
 String subFun(){
     variable String tmp="";
-    tmp+="@SP\n";
-    tmp+="A=M\n";
-    tmp+="A=A-1\n";
-    tmp+="D=M\n";
-    tmp+="A=A-1\n";
-    tmp+="M=M-D\n";
+    tmp+="@SP\n";//set A ="SP"
+    tmp+="A=M\n";//A=RAM[A]=RAM[SP]
+    tmp+="A=A-1\n";//the location of the first operand
+    tmp+="D=M\n";//set D= firs operand
+    tmp+="A=A-1\n";//the location of the second operand
+    tmp+="M=M-D\n";//Subtraction operands and writing in the stack (on the head)
     return tmp;
 }
 
 String negFun(){
     variable String tmp="";
-    tmp+="@SP\n";
-    tmp+="A=M\n";
-    tmp+="A=A-1\n";
-    tmp+="D=M\n";
-    tmp+="M=-D\n";
+    tmp+="@SP\n";//set A ="SP"
+    tmp+="A=M\n";//A=RAM[A]=RAM[SP]
+    tmp+="A=A-1\n";///the location of the  operand
+    tmp+="D=M\n";//set D=operand
+    tmp+="M=-D\n";//writing -operand in the stack (on the head)
     return tmp;
 }
 
 String andFun(){
     variable String tmp="";
-    tmp+="@SP\n";
-    tmp+="A=M\n";
-    tmp+="A=A-1\n";
-    tmp+="D=M\n";
-    tmp+="A=A-1\n";
-    tmp+="M=M&D\n";
+    tmp+="@SP\n";//set A ="SP"
+    tmp+="A=M\n";//A=RAM[A]=RAM[SP]
+    tmp+="A=A-1\n";//the location of the first operand
+    tmp+="D=M\n";//set D=operand
+    tmp+="A=A-1\n";//the location of the second operand
+    tmp+="M=M&D\n";//writing the result(T/F) in the stack (on the head)
     return tmp;
 }
 
 String notFun(){
     variable String tmp="";
-    tmp+="@SP\n";
-    tmp+="A=M\n";
-    tmp+="A=A-1\n";
-    tmp+="D=M\n";
-    tmp+="M=!D\n";
+    tmp+="@SP\n";//set A ="SP"
+    tmp+="A=M\n";//A=RAM[A]=RAM[SP]
+    tmp+="A=A-1\n";//the location of the operand
+    tmp+="D=M\n";//set D=operand
+    tmp+="M=!D\n";//writing the result(T/F) in the stack (on the head)
     return tmp;
 
 }
 
 String orFun(){
     variable String tmp="";
-    tmp+="@SP\n";
-    tmp+="A=M\n";
-    tmp+="A=A-1\n";
-    tmp+="D=M\n";
-    tmp+="A=A-1\n";
-    tmp+="M=M|D\n";
+    tmp+="@SP\n";//set A ="SP"
+    tmp+="A=M\n";//A=RAM[A]=RAM[SP]
+    tmp+="A=A-1\n";//the location of the first operand
+    tmp+="D=M\n";//set D= first operand
+    tmp+="A=A-1\n";//the location of the second first operand
+    tmp+="M=M|D\n";//writing the result(T/F) in the stack (on the head)
 
     return tmp;
 }
@@ -152,98 +155,212 @@ variable Integer counter = 0;//For lables
 
 String eqFun(){
     variable String tmp="";
-    tmp+="@SP\n";
-    tmp+="A=M\n";
-    tmp+="A=A-1\n";
-    tmp+="D=M\n";
-    tmp+="A=A-1\n";
-    tmp+="D=M-D\n"; //arg1-arg2
-    tmp+="IF_TRUE"+counter.string+"\n"; //firs lable
-    tmp+="D;JEQ\n"; //jump if equals
-    tmp+="D=0\n"; //not equals so D=false
-    tmp+="@SP\n";
-    tmp+="A=M-1\n";
-    tmp+="A=A-1\n";
-    tmp+="M=D\n";
-    tmp+="IF_FALSE"+counter.string+"\n"; //second lable
-    tmp+="0;JMP\n"; //jump to second lable
-    tmp+="(IF_TRUE" + counter.string + ")\n";
-    tmp+="D=-1\n";
-    tmp+="@SP\n";
-    tmp+="A=M-1\n";
-    tmp+="A=A-1\n";
-    tmp+="M=D\n";
-    tmp+="(IF_FALSE" + counter.string + ")\n";
-    tmp+="@SP\n";
-    tmp+="M=M-1\n";
+    tmp+="@SP\n";//set A ="SP"
+    tmp+="A=M\n";//A=RAM[A]=RAM[SP]
+    tmp+="A=A-1\n";//the location of the first operand
+    tmp+="D=M\n";//set D= first operand
+    tmp+="A=A-1\n";//the location of the second operand
+    tmp+="D=M-D\n"; //D=second opreand-firs operand
+    tmp+="@IF_TRUE"+counter.string+"\n"; //first lable
+    tmp+="D;JEQ\n"; //jump if equals to the labale that located in A
+    tmp+="D=0\n"; //If we are here, that means they are not equal (no jumped)  so D=false
+    tmp+="@SP\n";//set A ="SP"
+    tmp+="A=M-1\n";//the location of the first operand -not head of the stack yet
+    tmp+="A=A-1\n";//the location of the second operand - now iss the head of the stack
+    tmp+="M=D\n"; //writing the result F (0) in the stack (on the head)
+    tmp+="@IF_FALSE"+counter.string+"\n"; //second lable
+    tmp+="0;JMP\n"; //jump to second lable that located in A
+
+    tmp+="(IF_TRUE" + counter.string + ")\n"; //first lable commands
+    tmp+="D=-1\n";//set D= -1
+    tmp+="@SP\n";//set A ="SP"
+    tmp+="A=M-1\n";//the location of the first operand -not head of the stack yet
+    tmp+="A=A-1\n";//the location of the second operand - now iss the head of the stack
+    tmp+="M=D\n";//writing the result T (-1) in the stack (on the head)
+
+    tmp+="(IF_FALSE" + counter.string + ")\n";//Second lable commands
+    tmp+="@SP\n";//set A="SP"
+    tmp+="M=M-1\n";//SP value = SP value +1
 
     return tmp;
 }
 
 String ltFun(){
     variable String tmp="";
-    tmp+="@SP\n";
-    tmp+="A=M\n";
-    tmp+="A=A-1\n";
-    tmp+="D=M\n";
-    tmp+="A=A-1\n";
-    tmp+="D=M-D\n";
-    tmp+="IF_TRUE"+counter.string+"\n";
-    tmp+="D;JLT\n";
-    tmp+="D=0\n";
-    tmp+="@SP\n";
-    tmp+="A=M-1\n";
-    tmp+="A=A-1\n";
-    tmp+="M=D\n";
-    tmp+="IF_FALSE"+counter.string+"\n";
-    tmp+="0;JMP\n";
-    tmp+="(IF_TRUE" + counter.string + ")\n";
-    tmp+="D=-1\n";
-    tmp+="@SP\n";
-    tmp+="A=M-1\n";
-    tmp+="A=A-1\n";
-    tmp+="M=D\n";
-    tmp+="(IF_FALSE" + counter.string + ")\n";
-    tmp+="@SP\n";
-    tmp+="M=M-1\n";
+    tmp+="@SP\n";//set A ="SP"
+    tmp+="A=M\n";//A=RAM[A]=RAM[SP]
+    tmp+="A=A-1\n";//the location of the first operand
+    tmp+="D=M\n";//set D= first operand
+    tmp+="A=A-1\n";//the location of the second operand
+    tmp+="D=M-D\n"; //D=second opreand-firs operand
+    tmp+="@IF_TRUE"+counter.string+"\n"; //first lable
+    tmp+="D;JLT\n"; //jump if x<y (comp<0) to the labale that located in A
+    tmp+="D=0\n"; //If we are here, that means they are not equal (no jumped)  so D=false
+    tmp+="@SP\n";//set A ="SP"
+    tmp+="A=M-1\n";//the location of the first operand -not head of the stack yet
+    tmp+="A=A-1\n";//the location of the second operand - now iss the head of the stack
+    tmp+="M=D\n"; //writing the result F (0) in the stack (on the head)
+    tmp+="@IF_FALSE"+counter.string+"\n"; //second lable
+    tmp+="0;JMP\n"; //jump to second lable that located in A
 
+    tmp+="(IF_TRUE" + counter.string + ")\n"; //first lable commands
+    tmp+="D=-1\n";//set D= -1
+    tmp+="@SP\n";//set A ="SP"
+    tmp+="A=M-1\n";//the location of the first operand -not head of the stack yet
+    tmp+="A=A-1\n";//the location of the second operand - now iss the head of the stack
+    tmp+="M=D\n";//writing the result T (-1) in the stack (on the head)
+
+    tmp+="(IF_FALSE" + counter.string + ")\n";//Second lable commands
+    tmp+="@SP\n";//set A="SP"
+    tmp+="M=M-1\n";//SP value = SP value +1
     return tmp;
 }
 
 String gtFun(){
     variable String tmp="";
-    tmp+="@SP\n";
-    tmp+="A=M\n";
-    tmp+="A=A-1\n";
-    tmp+="D=M\n";
-    tmp+="A=A-1\n";
-    tmp+="D=M-D\n";
-    tmp+="IF_TRUE"+counter.string+"\n";
-    tmp+="D;JGT\n";
-    tmp+="D=0\n";
-    tmp+="@SP\n";
-    tmp+="A=M-1\n";
-    tmp+="A=A-1\n";
-    tmp+="M=D\n";
-    tmp+="IF_FALSE"+counter.string+"\n";
-    tmp+="0;JMP\n";
-    tmp+="(IF_TRUE" + counter.string + ")\n";
-    tmp+="D=-1\n";
-    tmp+="@SP\n";
-    tmp+="A=M-1\n";
-    tmp+="A=A-1\n";
-    tmp+="M=D\n";
-    tmp+="(IF_FALSE" + counter.string + ")\n";
-    tmp+="@SP\n";
-    tmp+="M=M-1\n";
+    tmp+="@SP\n";//set A ="SP"
+    tmp+="A=M\n";//A=RAM[A]=RAM[SP]
+    tmp+="A=A-1\n";//the location of the first operand
+    tmp+="D=M\n";//set D= first operand
+    tmp+="A=A-1\n";//the location of the second operand
+    tmp+="D=M-D\n"; //D=second opreand-firs operand
+    tmp+="@IF_TRUE"+counter.string+"\n"; //first lable
+    tmp+="D;JGT\n"; //jump if x>y (comp >0) to the labale that located in A
+    tmp+="D=0\n"; //If we are here, that means they are not equal (no jumped)  so D=false
+    tmp+="@SP\n";//set A ="SP"
+    tmp+="A=M-1\n";//the location of the first operand -not head of the stack yet
+    tmp+="A=A-1\n";//the location of the second operand - now iss the head of the stack
+    tmp+="M=D\n"; //writing the result F (0) in the stack (on the head)
+    tmp+="@IF_FALSE"+counter.string+"\n"; //second lable
+    tmp+="0;JMP\n"; //jump to second lable that located in A
 
+    tmp+="(IF_TRUE" + counter.string + ")\n"; //first lable commands
+    tmp+="D=-1\n";//set D= -1
+    tmp+="@SP\n";//set A ="SP"
+    tmp+="A=M-1\n";//the location of the first operand -not head of the stack yet
+    tmp+="A=A-1\n";//the location of the second operand - now iss the head of the stack
+    tmp+="M=D\n";//writing the result T (-1) in the stack (on the head)
+
+    tmp+="(IF_FALSE" + counter.string + ")\n";//Second lable commands
+    tmp+="@SP\n";//set A="SP"
+    tmp+="M=M-1\n";//SP value = SP value +1
     return tmp;
 
 }
 
 //String popFun(){}
 
-//String pushFun(){}
+String pushFun(String line,String nameOfFile ){
+     variable String tmp="";
+     {String*} sentence = line.split();
+
+    String? segment = sentence.rest.first;
+    assert (exists segment);
+
+    String? index = sentence.rest.rest.first;
+    assert (exists index);
+
+    switch (segment)
+    case ("argument") {
+        tmp+= "@ARG\n"; //set A="ARG" (name of register)
+        tmp+="D=M\n"; //D=M=RAM[A]=RAM[ARG}
+        tmp+="@" + index +"\n";//set A = index (push segment index)
+        tmp+= "A=D+A\n"; // the currrent place on the segment
+        tmp+="D=M\n"; // set D= value of the argument
+        tmp+="@SP\n"; //set A= "SP"
+        tmp+="A=M\n"; // A=M=RAM[A]=RAM[SP]
+        tmp+="M=D\n"; // write the argument on the stack
+        tmp+="@SP\n"; // set A= "SP"
+        tmp+="M=M+1\n"; // SP value = SP value +1
+    }
+    case ("local") {
+        tmp+= "@LCL\n"; //set A="LCL" (name of register)
+        tmp+="D=M\n"; //D=M=RAM[A]=RAM[ARG}
+        tmp+="@" + index +"\n";//set A = index (push segment index)
+        tmp+= "A=D+A\n"; // the currrent place on the segment
+        tmp+="D=M\n"; // set D= value of the local var
+        tmp+="@SP\n"; //set A= "SP"
+        tmp+="A=M\n"; // A=M=RAM[A]=RAM[SP]
+        tmp+="M=D\n"; // write the local var on the stack
+        tmp+="@SP\n"; // set A= "SP"
+        tmp+="M=M+1\n"; // SP value = SP value +1
+
+    }
+    case ("static") {
+        tmp+="@" + nameOfFile + "." + index + "\n"; //set A= "name_of_file.index"
+        tmp+="D=M\n"; // D=M =RAM[A]= RAM[ame_of_file.index]
+        tmp+="@SP\n";//set A="SP"
+        tmp+="A=M\n"; //A=M=RAM[A]=RAM[SP]
+        tmp+="M=D\n"; // write the  var on the stack
+        tmp+="@SP\n"; // set A= "SP"
+        tmp+="M=M+1\n"; // SP value = SP value +1
+    }
+    case ("constant") {
+        tmp+="@" + index +"\n";//set A=index (constant)
+        tmp+="D=A\n";//set D= index (constant)
+        tmp+="@SP\n"; //set A= "SP";
+        tmp+="A=M\n"; //A=M=RAM[A]=RAM[SP]
+        tmp+="M=D\n"; // write the  var on the stack
+        tmp+="@SP\n"; // set A= "SP"
+        tmp+="M=M+1\n"; // SP value = SP value +1
+
+    }
+    case ("this") {
+        tmp+= "@THIS\n"; //set A="ARG" (name of register)
+        tmp+="D=M\n"; //D=M=RAM[A]=RAM[ARG}
+        tmp+="@" + index +"\n";//set A = index (push segment index)
+        tmp+= "A=D+A\n"; // the currrent place on the segment
+        tmp+="D=M\n"; // set D= value of the var
+        tmp+="@SP\n"; //set A= "SP"
+        tmp+="A=M\n"; // A=M=RAM[A]=RAM[SP]
+        tmp+="M=D\n"; // write the var on the stack
+        tmp+="@SP\n"; // set A= "SP"
+        tmp+="M=M+1\n"; // SP value = SP value +1
+
+    }
+    case ("that") {
+        tmp+= "@THAT\n"; //set A="ARG" (name of register)
+        tmp+="D=M\n"; //D=M=RAM[A]=RAM[ARG}
+        tmp+="@" + index +"\n";//set A = index (push segment index)
+        tmp+= "A=D+A\n"; // the currrent place on the segment
+        tmp+="D=M\n"; // set D= value of the var
+        tmp+="@SP\n"; //set A= "SP"
+        tmp+="A=M\n"; // A=M=RAM[A]=RAM[SP]
+        tmp+="M=D\n"; // write the var on the stack
+        tmp+="@SP\n"; // set A= "SP"
+        tmp+="M=M+1\n"; // SP value = SP value +1
+
+    }
+    case ("pointer") {
+        tmp+= "@3\n"; //set A="3" (name of register)
+        tmp+="D=A\n"; //set D=5
+        tmp+="@" + index +"\n";//set A = index (push segment index)
+        tmp+= "A=D+A\n"; // the currrent place on the segment (5+ index)
+        tmp+="D=M\n"; // set D= value of the var M[5+x]
+        tmp+="@SP\n"; //set A= "SP"
+        tmp+="A=M\n"; // A=M=RAM[A]=RAM[SP]
+        tmp+="M=D\n"; // write the var on the stack
+        tmp+="@SP\n"; // set A= "SP"
+        tmp+="M=M+1\n"; // SP value = SP value +1
+
+    }
+    case ("temp") {
+        tmp+= "@5\n"; //set A="5" (name of register)
+        tmp+="D=A\n"; //set D=5
+        tmp+="@" + index +"\n";//set A = index (push segment index)
+        tmp+= "A=D+A\n"; // the currrent place on the segment (5+ index)
+        tmp+="D=M\n"; // set D= value of the var M[5+x]
+        tmp+="@SP\n"; //set A= "SP"
+        tmp+="A=M\n"; // A=M=RAM[A]=RAM[SP]
+        tmp+="M=D\n"; // write the var on the stack
+        tmp+="@SP\n"; // set A= "SP"
+        tmp+="M=M+1\n"; // SP value = SP value +1
+
+    }
+    else {}
+
+return tmp;
+}
 
 
 
