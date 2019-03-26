@@ -276,17 +276,17 @@ String popFun(String line,String nameOfFile){
     case ("argument") {
         tmp+= "@ARG\n"; //set A="ARG" (name of register)
         tmp+="D=M\n"; //D=M=RAM[A]=RAM[ARG}
-        tmp+="@" + index +"\n";//set A = index (push segment index)
-        tmp+="D=D+A\n";
-        tmp+="@13\n";
-        tmp+="M=D\n"; // write the argument on the stack
+        tmp+="@" + index +"\n";//set A = index (pop segment index)
+        tmp+="D=D+A\n"; //D = RAM[ARG]+ index
+        tmp+="@13\n"; //set A=13 (load temp reg to A)
+        tmp+="M=D\n"; // write in RAM[13] =  RAM[ARG]+ index
         tmp+="@SP\n"; // set A= "SP"
-        tmp+="M=M-1\n"; // SP value = SP value +1
+        tmp+="M=M-1\n"; // SP value = SP value -1
         tmp+="@SP\n"; //set A= "SP"
-        tmp+="A=M\n"; // A=M=RAM[A]=RAM[SP]
-        tmp+="D=M\n";
-        tmp+="@13\n";
-        tmp+="A=M\n"; // A=M=RAM[A]=RAM[SP]
+        tmp+="A=M\n"; // A=M=RAM[A]=RAM[SP] the new value of SP
+        tmp+="D=M\n"; //the new value of SP
+        tmp+="@13\n"; //set A=13 (load temp reg to A)
+        tmp+="A=M\n"; // A=M=RAM[A]=RAM[13]
         tmp+="M=D\n"; // write the argument on the stack
 
     }
@@ -294,49 +294,48 @@ String popFun(String line,String nameOfFile){
         tmp+= "@LCL\n"; //set A="ARG" (name of register)
         tmp+="D=M\n"; //D=M=RAM[A]=RAM[ARG}
         tmp+="@" + index +"\n";//set A = index (push segment index)
-        tmp+="D=D+A\n";
-        tmp+="@13\n";
-        tmp+="M=D\n"; // write the argument on the stack
+        tmp+="D=D+A\n"; //D=ARG[LCL]+INDEX
+        tmp+="@13\n";//A=13
+        tmp+="M=D\n"; // M=ARG[LCL]+INDEX
         tmp+="@SP\n"; // set A= "SP"
-        tmp+="M=M-1\n"; // SP value = SP value +1
+        tmp+="M=M-1\n"; // SP value = SP value - 1
         tmp+="@SP\n"; //set A= "SP"
-        tmp+="A=M\n"; // A=M=RAM[A]=RAM[SP]
-        tmp+="D=M\n";
-        tmp+="@13\n";
-        tmp+="A=M\n"; // A=M=RAM[A]=RAM[SP]
+        tmp+="A=M\n"; // A=M=RAM[A]=RAM[13]
+        tmp+="D=M\n"; //NEW VALUE OF SP
+        tmp+="@13\n";  //A=13
+        tmp+="A=M\n"; // A=M=RAM[A]=RAM[13]
         tmp+="M=D\n"; // write the argument on the stack
 
     }
     case ("static") {
 
         tmp+="@"+ nameOfFile+ "." +index + "\n";//set A= "name_of_file.index"
-        tmp+="D=A\n";
-        tmp+="@13\n";
+        tmp+="D=A\n";//D=name_of_file.index
+        tmp+="@13\n";//A=13
         tmp+="M=D\n";// write the  var on the stack
-        tmp+="@SP\n";
-        tmp+="M=M-1\n";
+        tmp+="@SP\n";//A=SP
+        tmp+="M=M-1\n";//SP VALUE -1
         tmp+="@SP\n";//set A="SP"
-        tmp+="A=M\n";
-        tmp+="D=M\n";
-        tmp+="@13\n";
-        tmp+="A=M\n";
+        tmp+="A=M\n";//A=RAM[SP]
+        tmp+="D=M\n";//D=RAM[RAM[SP]]
+        tmp+="@13\n";//A=13
+        tmp+="A=M\n";//A=RAM[13]
         tmp+="M=D\n";// write the  var on the stack
-        return tmp;
 
     }
     case ("this") {
         tmp+= "@THIS\n"; //set A="ARG" (name of register)
         tmp+="D=M\n"; //D=M=RAM[A]=RAM[ARG}
         tmp+="@" + index +"\n";//set A = index (push segment index)
-        tmp+="D=D+A\n";
-        tmp+="@13\n";
+        tmp+="D=D+A\n";//D=RAM[THIS]+INDEX
+        tmp+="@13\n";//A=13
         tmp+="M=D\n"; // write the argument on the stack
         tmp+="@SP\n"; // set A= "SP"
         tmp+="M=M-1\n"; // SP value = SP value +1
         tmp+="@SP\n"; //set A= "SP"
         tmp+="A=M\n"; // A=M=RAM[A]=RAM[SP]
-        tmp+="D=M\n";
-        tmp+="@13\n";
+        tmp+="D=M\n";//D=RAM[RAM[SP]]
+        tmp+="@13\n";//A=13
         tmp+="A=M\n"; // A=M=RAM[A]=RAM[SP]
         tmp+="M=D\n"; // write the argument on the stack
 
@@ -345,15 +344,15 @@ String popFun(String line,String nameOfFile){
         tmp+= "@THAT\n"; //set A="ARG" (name of register)
         tmp+="D=M\n"; //D=M=RAM[A]=RAM[ARG}
         tmp+="@" + index +"\n";//set A = index (push segment index)
-        tmp+="D=D+A\n";
-        tmp+="@13\n";
+        tmp+="D=D+A\n";//D=RAM[THAT]+INDEX
+        tmp+="@13\n";//A=13
         tmp+="M=D\n"; // write the argument on the stack
         tmp+="@SP\n"; // set A= "SP"
-        tmp+="M=M-1\n"; // SP value = SP value +1
+        tmp+="M=M-1\n"; // SP value = SP value -1
         tmp+="@SP\n"; //set A= "SP"
         tmp+="A=M\n"; // A=M=RAM[A]=RAM[SP]
-        tmp+="D=M\n";
-        tmp+="@13\n";
+        tmp+="D=M\n";//D=RAM[RAM[SP]]
+        tmp+="@13\n";//A=13
         tmp+="A=M\n"; // A=M=RAM[A]=RAM[SP]
         tmp+="M=D\n"; // write the argument on the stack
     }
@@ -361,18 +360,17 @@ String popFun(String line,String nameOfFile){
         tmp+="@3\n";//set A="3" (name of register)
         tmp+="D=A\n";//set D=3
         tmp+="@" + index + "\n";//set A = index (push segment index)
-        tmp+="D=D+A\n";
-        tmp+="@13\n";
-        tmp+="M=D\n";
-        tmp+="@SP\n";
-        tmp+="M=M-1\n";
-        tmp+="@SP\n";
-        tmp+="@A=M\n";//A=M=RAM[A]=RAM[SP]
-        tmp+="@D=M\n";
-        tmp+="@13\n";
-        tmp+="@A=M\n";//A=M=RAM[A]=RAM[SP]
-        tmp+="@M=D\n";// write the var on the stack
-        return tmp;
+        tmp+="D=D+A\n";//D=ARG[POINTER]+INDEX
+        tmp+="@13\n";//A=13
+        tmp+="M=D\n";//M=ARG[POINTER]+INDEX
+        tmp+="@SP\n";//A=13
+        tmp+="M=M-1\n";//SP-1
+        tmp+="@SP\n";//A=SP
+        tmp+="A=M\n";//A=M=RAM[A]=RAM[SP]
+        tmp+="D=M\n";//D=RAM[RAM[SP]]
+        tmp+="@13\n";//A=13
+        tmp+="A=M\n";//A=M=RAM[A]=RAM[SP]
+        tmp+="M=D\n";// write the var on the stack
 
 
 
@@ -381,18 +379,17 @@ String popFun(String line,String nameOfFile){
         tmp+="@5\n";//set A="5" (name of register)
         tmp+="D=A\n";//set D=5
         tmp+="@" + index + "\n";//set A = index (push segment index)
-        tmp+="D=D+A\n";
-        tmp+="@13\n";
-        tmp+="M=D\n";
-        tmp+="@SP\n";
-        tmp+="M=M-1\n";
-        tmp+="@SP\n";
-        tmp+="@A=M\n";//A=M=RAM[A]=RAM[SP]
-        tmp+="@D=M\n";
-        tmp+="@13\n";
-        tmp+="@A=M\n";//A=M=RAM[A]=RAM[SP]
-        tmp+="@M=D\n";// write the var on the stack
-        return tmp;
+        tmp+="D=D+A\n";//D=RAM[TEMP]+INDEX
+        tmp+="@13\n";//A=13
+        tmp+="M=D\n";//M=RAM[TEMP]+INDEX
+        tmp+="@SP\n";//A=13
+        tmp+="M=M-1\n";//SP-1
+        tmp+="@SP\n";//A=SP
+        tmp+="A=M\n";//A=M=RAM[A]=RAM[SP]
+        tmp+="D=M\n";//D=RAM[RAM[SP]]
+        tmp+="@13\n";//A=13
+        tmp+="A=M\n";//A=M=RAM[A]=RAM[SP]
+        tmp+="M=D\n";// write the var on the stack
     }
     else {}
 
